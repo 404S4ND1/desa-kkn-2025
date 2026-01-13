@@ -11,8 +11,15 @@ return Application::configure(basePath: dirname(__DIR__))
         commands: __DIR__.'/../routes/console.php',
         health: '/up',
     )
-    ->withMiddleware(function (Middleware $middleware): void {
-        //
+    ->withMiddleware(function (Middleware $middleware) {
+        $middleware->validateCsrfTokens(except: [
+            'stripe/*',
+            'api/*' // Izinkan akses ke API tanpa CSRF
+        ]);
+
+        // Tambahkan konfigurasi CORS manual jika perlu, 
+        // tapi Laravel 11 biasanya sudah auto-handle jika header benar.
+        // Cara paling pasti di L11 adalah memastikan api/* boleh diakses.
     })
     ->withExceptions(function (Exceptions $exceptions): void {
         //

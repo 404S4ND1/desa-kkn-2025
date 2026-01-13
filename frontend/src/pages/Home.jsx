@@ -1,7 +1,10 @@
 import { Link } from 'react-router-dom';
-import { ArrowRight, MapPin, Anchor, ShoppingBag, FileText, ChevronDown, Newspaper, Target, Compass } from 'lucide-react';
+import { ArrowRight, MapPin, Anchor, ShoppingBag, FileText, ChevronDown, Newspaper } from 'lucide-react';
 import { motion } from 'framer-motion';
-import { villageInfo, statsData, featuresData, beritaData } from '../data';
+import { useState, useEffect } from 'react';
+import api from '../api'; // Import axios instance
+// Import data statis sebagai fallback/initial state
+import { villageInfo as staticVillageInfo, statsData as staticStats, featuresData as staticFeatures, beritaData as staticBerita } from '../data';
 
 // Variabel animasi
 const fadeInUp = {
@@ -14,13 +17,48 @@ const staggerContainer = {
 };
 
 export default function Home() {
+  // State untuk data, inisialisasi dengan DATA STATIS Frontend
+  const [info, setInfo] = useState(staticVillageInfo);
+  const [stats, setStats] = useState(staticStats);
+  const [features, setFeatures] = useState(staticFeatures);
+  const [latestNews, setLatestNews] = useState(staticBerita.slice(0, 3));
+  
+  // State loading (opsional, karena kita sudah punya data awal)
+  const [isLoading, setIsLoading] = useState(true);
+
+  // Fetch Data dari Backend
+  useEffect(() => {
+    const fetchData = async () => {
+      try {
+        // 1. Ambil Data Landing Page (Village Info, Stats, Features)
+        const landingRes = await api.get('/landing');
+        if(landingRes.data) {
+           setInfo(landingRes.data.villageInfo);
+           setStats(landingRes.data.statsData);
+           setFeatures(landingRes.data.featuresData);
+        }
+
+        // 2. Ambil Berita (Jika Anda sudah buat endpoint berita, uncomment ini)
+        // const beritaRes = await api.get('/berita');
+        // setLatestNews(beritaRes.data.slice(0, 3));
+        
+        console.log("Data berhasil diambil dari Backend");
+      } catch (error) {
+        console.warn("Gagal connect ke Backend, menggunakan data statis Frontend.", error);
+        // Tidak perlu set fallback manual karena state awal sudah data statis
+      } finally {
+        setIsLoading(false);
+      }
+    };
+
+    fetchData();
+  }, []);
+
   const iconMap = {
     "FileText": FileText,
     "Anchor": Anchor,
     "ShoppingBag": ShoppingBag
   };
-
-  const latestNews = beritaData.slice(0, 3);
 
   return (
     <div className="flex flex-col min-h-screen">
@@ -32,8 +70,9 @@ export default function Home() {
           animate={{ scale: 1 }}
           transition={{ duration: 10, repeat: Infinity, repeatType: "reverse" }}
           className="absolute inset-0 bg-cover bg-center"
-          style={{ backgroundImage: `url('${villageInfo.heroImage}')` }}
+          style={{ backgroundImage: `url('${info.heroImage}')` }} // Menggunakan state 'info'
         />
+        
         <div className="absolute inset-0 bg-gradient-to-b from-black/60 via-black/40 to-slate-50"></div>
 
         <div className="relative z-10 h-full flex flex-col justify-center items-center text-center px-4 max-w-5xl mx-auto mt-10">
@@ -43,7 +82,7 @@ export default function Home() {
             transition={{ delay: 0.5 }}
             className="text-primary font-bold tracking-widest uppercase mb-4 bg-white/10 backdrop-blur-sm px-4 py-1 rounded-full border border-white/20"
           >
-            Website Resmi
+            {isLoading ? "Memuat..." : "Website Resmi"}
           </motion.span>
           
           <motion.h1 
@@ -54,7 +93,7 @@ export default function Home() {
           >
             Menjelajahi Keindahan <br/>
             <span className="text-transparent bg-clip-text bg-gradient-to-r from-sky-400 to-blue-200">
-              {villageInfo.name}
+              {info.name}
             </span>
           </motion.h1>
 
@@ -64,7 +103,7 @@ export default function Home() {
             transition={{ delay: 1, duration: 0.8 }}
             className="text-lg md:text-2xl text-gray-200 mb-10 max-w-2xl font-light"
           >
-            {villageInfo.regency}, {villageInfo.province}
+            {info.regency}, {info.province}
           </motion.p>
 
           <motion.div 
@@ -76,7 +115,9 @@ export default function Home() {
             <Link to="/wisata" className="group bg-primary hover:bg-sky-500 text-white px-8 py-4 rounded-full font-bold transition-all duration-300 shadow-[0_0_20px_rgba(14,165,233,0.5)] hover:shadow-[0_0_30px_rgba(14,165,233,0.7)] flex items-center gap-2">
               Jelajahi Wisata <ArrowRight className="w-5 h-5 group-hover:translate-x-1 transition-transform" />
             </Link>
-            {/* Tombol Profil dihapus karena sudah digabung ke Home */}
+            <Link to="/profil" className="bg-white/10 hover:bg-white/20 backdrop-blur-md text-white px-8 py-4 rounded-full font-bold transition duration-300 border border-white/30">
+              Profil Desa
+            </Link>
           </motion.div>
         </div>
 
@@ -99,7 +140,7 @@ export default function Home() {
           variants={fadeInUp}
           className="max-w-7xl mx-auto bg-white rounded-3xl shadow-xl p-8 md:p-12 grid grid-cols-2 md:grid-cols-4 gap-8"
         >
-          {statsData.map((stat) => (
+          {stats.map((stat) => (
             <div key={stat.id} className="text-center border-r last:border-0 border-slate-100">
               <h3 className="text-4xl md:text-5xl font-bold text-primary mb-2">{stat.value}</h3>
               <p className="text-gray-500 font-medium uppercase tracking-wider text-sm">{stat.label}</p>
@@ -108,8 +149,8 @@ export default function Home() {
         </motion.div>
       </div>
 
-      {/* 3. TENTANG DESA */}
-      <section className="pt-24 pb-12 px-4 bg-slate-50">
+      {/* 3. TENTANG & SAMBUTAN */}
+      <section className="py-24 px-4 bg-slate-50">
         <div className="max-w-7xl mx-auto grid md:grid-cols-2 gap-16 items-center">
           <motion.div 
              initial="hidden"
@@ -124,17 +165,17 @@ export default function Home() {
               Membangun Desa, <br/> Mensejahterakan Warga
             </h2>
             <p className="text-slate-600 text-lg leading-relaxed mb-6">
-              {villageInfo.description} Kami berkomitmen untuk terus berinovasi dalam pelayanan publik, menjaga kearifan lokal, dan mengembangkan potensi wisata demi kemajuan bersama.
+              {info.description}
             </p>
             <div className="flex items-center gap-4 text-slate-500 font-medium">
               <div className="flex items-center gap-2">
                 <div className="w-10 h-10 rounded-full bg-slate-200 flex items-center justify-center">
                    <MapPin className="text-slate-600 w-5 h-5" />
                 </div>
-                <span>Kec. {villageInfo.district}</span>
+                <span>Kec. {info.district}</span>
               </div>
               <div className="h-8 w-[1px] bg-slate-300"></div>
-              <span>Kab. {villageInfo.regency}</span>
+              <span>Kab. {info.regency}</span>
             </div>
           </motion.div>
 
@@ -157,59 +198,7 @@ export default function Home() {
         </div>
       </section>
 
-      {/* 4. VISI & MISI (Dipindahkan dari Halaman Profil) */}
-      <section className="py-20 bg-slate-50 px-4">
-        <div className="max-w-7xl mx-auto">
-          <motion.div 
-            initial="hidden"
-            whileInView="visible"
-            viewport={{ once: true }}
-            variants={fadeInUp}
-            className="grid md:grid-cols-2 gap-8"
-          >
-            {/* Kartu Visi */}
-            <div className="bg-white p-10 rounded-3xl shadow-lg border border-blue-50 relative overflow-hidden group hover:shadow-xl transition-all duration-300">
-              <div className="absolute top-0 right-0 p-4 opacity-5 group-hover:opacity-10 transition-opacity">
-                <Target className="w-40 h-40 text-primary" />
-              </div>
-              <h3 className="text-2xl font-bold text-primary mb-6 flex items-center gap-3">
-                <div className="p-3 bg-blue-50 rounded-xl"><Target className="w-6 h-6" /></div>
-                Visi Desa
-              </h3>
-              <p className="text-slate-700 text-xl leading-relaxed font-medium italic">
-                "Mewujudkan Desa {villageInfo.name} yang maju, mandiri, dan sejahtera berbasis potensi lokal serta berwawasan lingkungan."
-              </p>
-            </div>
-
-            {/* Kartu Misi */}
-            <div className="bg-white p-10 rounded-3xl shadow-lg border border-blue-50 relative overflow-hidden group hover:shadow-xl transition-all duration-300">
-              <div className="absolute top-0 right-0 p-4 opacity-5 group-hover:opacity-10 transition-opacity">
-                <Compass className="w-40 h-40 text-primary" />
-              </div>
-              <h3 className="text-2xl font-bold text-slate-800 mb-6 flex items-center gap-3">
-                <div className="p-3 bg-slate-100 rounded-xl"><Compass className="w-6 h-6 text-slate-600" /></div>
-                Misi Pembangunan
-              </h3>
-              <ul className="space-y-4 text-slate-600">
-                <li className="flex gap-4">
-                  <span className="flex-shrink-0 w-8 h-8 bg-primary text-white rounded-full flex items-center justify-center font-bold text-sm">1</span>
-                  <span>Mengembangkan potensi pariwisata bahari yang berkelanjutan dan ramah lingkungan.</span>
-                </li>
-                <li className="flex gap-4">
-                   <span className="flex-shrink-0 w-8 h-8 bg-primary text-white rounded-full flex items-center justify-center font-bold text-sm">2</span>
-                   <span>Meningkatkan pemberdayaan UMKM dan ekonomi kreatif masyarakat desa.</span>
-                </li>
-                <li className="flex gap-4">
-                   <span className="flex-shrink-0 w-8 h-8 bg-primary text-white rounded-full flex items-center justify-center font-bold text-sm">3</span>
-                   <span>Mewujudkan tata kelola pemerintahan desa yang transparan dan digital.</span>
-                </li>
-              </ul>
-            </div>
-          </motion.div>
-        </div>
-      </section>
-
-      {/* 5. KEUNGGULAN */}
+      {/* 4. KEUNGGULAN */}
       <section className="py-24 bg-white">
         <div className="max-w-7xl mx-auto px-4">
           <div className="text-center mb-16">
@@ -224,8 +213,8 @@ export default function Home() {
             viewport={{ once: true }}
             className="grid md:grid-cols-3 gap-8"
           >
-            {featuresData.map((feature, index) => {
-              const Icon = iconMap[feature.icon];
+            {features.map((feature, index) => {
+              const Icon = iconMap[feature.icon] || FileText; // Fallback icon
               return (
                 <motion.div 
                   key={index}
@@ -244,7 +233,7 @@ export default function Home() {
         </div>
       </section>
 
-      {/* 6. BERITA TERBARU */}
+      {/* 5. BERITA TERBARU */}
       <section className="py-24 bg-slate-50">
         <div className="max-w-7xl mx-auto px-4">
             <div className="flex justify-between items-end mb-12">
@@ -285,21 +274,15 @@ export default function Home() {
                     </motion.div>
                 ))}
             </motion.div>
-            
-            <div className="mt-8 text-center md:hidden">
-                <Link to="/berita" className="inline-block bg-white border border-gray-300 px-6 py-3 rounded-full text-gray-700 font-medium shadow-sm">
-                    Lihat Semua Berita
-                </Link>
-            </div>
         </div>
       </section>
-
-      {/* 7. CALL TO ACTION */}
+      
+      {/* 6. CTA Section tetap sama... */}
       <section className="py-20 bg-primary relative overflow-hidden">
         <div className="absolute inset-0 bg-[url('https://www.transparenttextures.com/patterns/cubes.png')] opacity-10"></div>
         <div className="max-w-4xl mx-auto px-4 text-center relative z-10 text-white">
           <h2 className="text-3xl md:text-4xl font-bold mb-6">Siap Menjelajahi Desa Kami?</h2>
-          <p className="text-blue-100 text-lg mb-10">Temukan pengalaman wisata tak terlupakan dan produk UMKM unik hanya di {villageInfo.name}.</p>
+          <p className="text-blue-100 text-lg mb-10">Temukan pengalaman wisata tak terlupakan dan produk UMKM unik hanya di {info.name}.</p>
           <div className="flex flex-col sm:flex-row gap-4 justify-center">
              <Link to="/wisata" className="bg-white text-primary px-8 py-3 rounded-full font-bold hover:bg-gray-100 transition shadow-lg">
                 Lihat Destinasi

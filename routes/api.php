@@ -2,22 +2,35 @@
 
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
-use App\Models\Berita; // <--- Jangan lupa panggil Model Berita
-use App\Http\Controllers\SuratController; // <--- Taruh di paling atas file
+use App\Models\Berita;
+use App\Http\Controllers\SuratController;
 
-// Jalur Tes (Cek apakah API hidup)
-Route::get('/tes', function () {
-    return response()->json(['pesan' => 'API Berhasil Connect!']);
-});
+/*
+|--------------------------------------------------------------------------
+| API Routes
+|--------------------------------------------------------------------------
+*/
 
-// Jalur Berita (Yang dicari temanmu)
+// 1. API BERITA (GET) - Untuk ditampilkan di halaman depan warga
 Route::get('/berita', function () {
     $data = Berita::latest()->get();
     return response()->json($data);
 });
 
+// 2. API DETAIL BERITA (GET) - Kalau diklik satu berita
+Route::get('/berita/{id}', function ($id) {
+    $data = Berita::find($id);
+    if ($data) {
+        return response()->json($data);
+    } else {
+        return response()->json(['message' => 'Berita tidak ditemukan'], 404);
+    }
+});
 
-// ... kode berita yang tadi ...
-
-// JALUR KIRIM SURAT (Method POST)
+// 3. API AJUKAN SURAT (POST) - Untuk warga kirim form surat
 Route::post('/surat', [SuratController::class, 'store']);
+
+// 4. API TEST (Cek koneksi)
+Route::get('/test', function() {
+    return response()->json(['status' => 'Backend Aman Jaya!']);
+});
