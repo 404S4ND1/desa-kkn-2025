@@ -8,7 +8,8 @@ import Umkm from './pages/Umkm';
 import UmkmDetail from './pages/UmkmDetail';
 import Wisata from './pages/Wisata';
 import WisataDetail from './pages/WisataDetail';
-import LayananSurat from './pages/LayananSurat'; // <--- INI PENTING
+import LayananSurat from './pages/LayananSurat';
+import AdminDashboard from './pages/AdminDashboard'; // <--- INI PENTING
 
 function App() {
   return (
@@ -24,6 +25,8 @@ function App() {
         <Route path="/wisata" element={<Wisata />} />
         <Route path="/wisata/:id" element={<WisataDetail />} />
         <Route path="/layanan-surat" element={<LayananSurat />} />
+        {/* Halaman Rahasia Admin */}
+        <Route path="/admin-desa-rahasia" element={<AdminDashboard />} />   
       </Routes>
     </div>
   );
