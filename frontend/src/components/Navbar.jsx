@@ -81,11 +81,7 @@ export default function Navbar() {
             <Link to="/wisata" onClick={() => setIsOpen(false)} className="block px-4 py-3 rounded-lg hover:bg-blue-50 text-gray-700 font-medium">Wisata</Link>
             <Link to="/umkm" onClick={() => setIsOpen(false)} className="block px-4 py-3 rounded-lg hover:bg-blue-50 text-gray-700 font-medium">UMKM</Link>
             <Link to="/berita" onClick={() => setIsOpen(false)} className="block px-4 py-3 rounded-lg hover:bg-blue-50 text-gray-700 font-medium">Berita</Link>
-            
-            {/* TAMBAHAN BARU: Menu Mobile Layanan Surat */}
-            <Link to="/layanan-surat" onClick={() => setIsOpen(false)} className="block px-4 py-3 rounded-lg bg-primary/10 text-primary font-bold">
-              📩 Layanan Surat
-            </Link>
+            <Link to="/layanan-surat" onClick={() => setIsOpen(false)} className="block px-4 py-3 rounded-lg bg-primary/10 text-primary font-bold">Layanan Surat</Link>
           </div>
         </div>
       )}

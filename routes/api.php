@@ -29,6 +29,9 @@ Route::get('/berita/{id}', function ($id) {
 
 // 3. API AJUKAN SURAT (POST) - Untuk warga kirim form surat
 Route::post('/surat', [SuratController::class, 'store']);
+// --- TAMBAHKAN INI ---
+Route::get('/surat', [SuratController::class, 'index']);      // Buat Admin lihat daftar
+Route::put('/surat/{id}', [SuratController::class, 'update']); // Buat Admin ganti status
 
 // 4. API TEST (Cek koneksi)
 Route::get('/test', function() {
