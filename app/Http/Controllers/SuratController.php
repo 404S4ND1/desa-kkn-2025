@@ -3,70 +3,59 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
-use App\Models\Surat; // <--- Jangan lupa panggil Model Surat
+use App\Models\Surat;
 
 class SuratController extends Controller
 {
-    // -------------------------------------------------------------------------
-    // FITUR UNTUK ADMIN
-    // -------------------------------------------------------------------------
-
-    // 1. Fungsi MELIHAT semua daftar surat (Dipakai di Dashboard Admin)
+    // Ambil semua surat (Admin)
     public function index()
     {
-        // Kita ambil data dari yang paling baru (latest)
-        $surat = Surat::latest()->get();
-        return response()->json($surat);
+        // Urutkan dari yang terbaru
+        $data = Surat::latest()->get();
+        return response()->json($data);
     }
 
-    // 2. Fungsi UPDATE Status Surat (Dipakai saat Admin klik tombol "Selesai")
+    // Simpan surat baru (Warga)
+    public function store(Request $request)
+    {
+        $validated = $request->validate([
+            'nama_pemohon' => 'required|string|max:255',
+            'nik' => 'required|string|max:20',
+            'jenis_surat' => 'required|string',
+            'keterangan' => 'nullable|string',
+        ]);
+
+        // Default status = pending
+        $validated['status'] = 'pending'; 
+
+        $surat = Surat::create($validated);
+
+        return response()->json([
+            'message' => 'Surat berhasil diajukan',
+            'data' => $surat
+        ], 201);
+    }
+
+    // Update Status Surat (Admin)
     public function update(Request $request, $id)
     {
         $surat = Surat::find($id);
-        
+
         if (!$surat) {
             return response()->json(['message' => 'Surat tidak ditemukan'], 404);
         }
 
-        // Update status sesuai kiriman admin (misal: "Selesai" atau "Ditolak")
-        $surat->update([
-            'status' => $request->status 
-        ]);
-
-        return response()->json([
-            'message' => 'Status berhasil diperbarui!', 
-            'data' => $surat
-        ]);
-    }
-
-    // -------------------------------------------------------------------------
-    // FITUR UNTUK WARGA (FRONTEND)
-    // -------------------------------------------------------------------------
-
-    // 3. Fungsi MENERIMA kiriman data dari Warga
-    public function store(Request $request)
-    {
-        // Validasi
+        // Validasi input status
         $request->validate([
-            'nama_pemohon' => 'required',
-            'nik' => 'required|numeric',
-            'no_hp' => 'required',
-            'jenis_surat' => 'required',
+            'status' => 'required|in:pending,proses,selesai,ditolak'
         ]);
 
-        // Simpan
-        $surat = Surat::create([
-            'nama_pemohon' => $request->nama_pemohon,
-            'nik' => $request->nik,
-            'no_hp' => $request->no_hp,
-            'jenis_surat' => $request->jenis_surat,
-            'keterangan' => $request->keterangan,
-            'status' => 'Menunggu' // Default selalu Menunggu
-        ]);
+        $surat->status = $request->status;
+        $surat->save();
 
         return response()->json([
-            'message' => 'Surat berhasil diajukan!',
+            'message' => 'Status surat berhasil diperbarui',
             'data' => $surat
-        ], 201);
+        ]);
     }
 }

@@ -9,9 +9,12 @@ import UmkmDetail from './pages/UmkmDetail';
 import Wisata from './pages/Wisata';
 import WisataDetail from './pages/WisataDetail';
 import LayananSurat from './pages/LayananSurat';
-import AdminDashboard from './pages/AdminDashboard'; // Cukup satu kali import
-import Login from './pages/Login'; 
-import ProtectedRoute from './components/ProtectedRoute'; 
+import Login from './pages/Login';
+import ProtectedRoute from './components/ProtectedRoute';
+
+// Halaman Admin
+import AdminDashboard from './pages/AdminDashboard';
+import SuratAdmin from './pages/SuratAdmin';
 
 function App() {
   return (
@@ -20,14 +23,20 @@ function App() {
       <Routes>
         {/* Rute Publik */}
         <Route path="/" element={<Home />} />
-        <Route path="/login" element={<Login />} /> 
-        
-        {/* ... Rute publik lain (berita, wisata, dll) ... */}
+        <Route path="/berita" element={<Berita />} />
+        <Route path="/berita/:id" element={<BeritaDetail />} />
+        <Route path="/profil" element={<Profil />} />
+        <Route path="/umkm" element={<Umkm />} />
+        <Route path="/umkm/:id" element={<UmkmDetail />} />
+        <Route path="/wisata" element={<Wisata />} />
+        <Route path="/wisata/:id" element={<WisataDetail />} />
         <Route path="/layanan-surat" element={<LayananSurat />} />
+        <Route path="/login" element={<Login />} />
 
-        {/* Rute RAHASIA (Diproteksi) */}
+        {/* Rute Admin (Harus Login) */}
         <Route element={<ProtectedRoute />}>
-           <Route path="/admin-dashboard" element={<AdminDashboard />} />
+          <Route path="/admin-dashboard" element={<AdminDashboard />} />
+          <Route path="/surat-admin" element={<SuratAdmin />} />
         </Route>
       </Routes>
     </div>
