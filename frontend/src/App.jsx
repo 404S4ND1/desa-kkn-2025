@@ -9,11 +9,9 @@ import UmkmDetail from './pages/UmkmDetail';
 import Wisata from './pages/Wisata';
 import WisataDetail from './pages/WisataDetail';
 import LayananSurat from './pages/LayananSurat';
-import AdminDashboard from './pages/AdminDashboard'; // <--- INI PENTING
-import { Routes, Route } from 'react-router-dom';
-import Login from './pages/Login'; // <--- Import Login
-import ProtectedRoute from './components/ProtectedRoute'; // <--- Import Pengaman
-import AdminDashboard from './pages/AdminDashboard';
+import AdminDashboard from './pages/AdminDashboard'; // Cukup satu kali import
+import Login from './pages/Login'; 
+import ProtectedRoute from './components/ProtectedRoute'; 
 
 function App() {
   return (
@@ -29,7 +27,6 @@ function App() {
 
         {/* Rute RAHASIA (Diproteksi) */}
         <Route element={<ProtectedRoute />}>
-           {/* URL saya ganti jadi lebih standar, karena sudah aman diproteksi password */}
            <Route path="/admin-dashboard" element={<AdminDashboard />} />
         </Route>
       </Routes>
