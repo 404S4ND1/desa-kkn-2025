@@ -2,6 +2,19 @@
 @tailwind components;
 @tailwind utilities;
 
-body {
-    @apply bg-slate-50 text-slate-800;
+@layer base {
+  body {
+    @apply bg-surface text-primary antialiased;
+  }
+}
+
+/* Custom Scrollbar agar senada */
+::-webkit-scrollbar {
+    width: 10px;
+}
+::-webkit-scrollbar-track {
+    @apply bg-neutral/20;
+}
+::-webkit-scrollbar-thumb {
+    @apply bg-primary/40 rounded-full hover:bg-primary/60 transition-colors;
 }

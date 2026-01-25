@@ -7,8 +7,14 @@ export default {
   theme: {
     extend: {
       colors: {
-        primary: '#0ea5e9', // Warna biru langit (bisa diganti sesuai tema desa)
-        secondary: '#64748b',
+        primary: '#40513B',   // Hijau Tua (Main Brand/Text)
+        secondary: '#628141', // Hijau Daun (Hover/Accents)
+        neutral: '#E5D9B6',   // Krem/Beige (Backgrounds/Soft Highlights)
+        accent: '#E67E22',    // Oranye (Call to Action/Buttons)
+        surface: '#FAF9F6',   // Putih Tulang (Background bersih)
+      },
+      fontFamily: {
+        sans: ['Inter', 'system-ui', 'sans-serif'],
       }
     },
   },
