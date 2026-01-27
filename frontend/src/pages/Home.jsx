@@ -3,7 +3,7 @@ import { ArrowRight, MapPin, Anchor, ShoppingBag, FileText, ChevronDown, Newspap
 import { motion } from 'framer-motion';
 import { useState, useEffect } from 'react';
 import api from '../api';
-import { villageInfo as staticVillageInfo, statsData as staticStats, featuresData as staticFeatures, beritaData as staticBerita } from '../data';
+import { villageInfo as staticVillageInfo, featuresData as staticFeatures, beritaData as staticBerita } from '../data';
 
 const fadeInUp = {
   hidden: { opacity: 0, y: 60 },
@@ -16,10 +16,16 @@ const staggerContainer = {
 
 export default function Home() {
   const [info, setInfo] = useState(staticVillageInfo);
-  const [stats, setStats] = useState(staticStats);
   const [features, setFeatures] = useState(staticFeatures);
   const [latestNews, setLatestNews] = useState(staticBerita.slice(0, 3));
   const [isLoading, setIsLoading] = useState(true);
+
+  // 1. UPDATE DATA STATISTIK DI SINI 📊
+  const [stats, setStats] = useState([
+    { id: 1, value: "7.658", label: "Jumlah Penduduk" },
+    { id: 2, value: "2.079", label: "Jumlah Kepala Keluarga" },
+    { id: 3, value: "2", label: "Destinasi Wisata" }
+  ]);
 
   useEffect(() => {
     const fetchData = async () => {
@@ -27,7 +33,9 @@ export default function Home() {
         const landingRes = await api.get('/landing');
         if(landingRes.data) {
            setInfo(landingRes.data.villageInfo);
-           setStats(landingRes.data.statsData);
+           // Jika backend mengirim data stats, gunakan ini. 
+           // Jika tidak, dia akan pakai default yang kita set di atas.
+           if (landingRes.data.statsData) setStats(landingRes.data.statsData);
            setFeatures(landingRes.data.featuresData);
         }
       } catch (error) {
@@ -59,7 +67,7 @@ export default function Home() {
           style={{ backgroundImage: `url('${info.heroImage}')` }}
         />
         
-        {/* Gradient Overlay: Hijau Tua ke Transparan */}
+        {/* Gradient Overlay */}
         <div className="absolute inset-0 bg-gradient-to-b from-primary/80 via-primary/40 to-surface"></div>
 
         <div className="relative z-10 h-full flex flex-col justify-center items-center text-center px-4 max-w-5xl mx-auto mt-10">
@@ -118,17 +126,18 @@ export default function Home() {
         </motion.div>
       </div>
 
-      {/* 2. STATISTIK */}
+      {/* 2. STATISTIK (Updated Grid & Data) */}
       <div className="relative z-20 -mt-24 px-4">
         <motion.div 
           initial="hidden"
           whileInView="visible"
           viewport={{ once: true }}
           variants={fadeInUp}
-          className="max-w-7xl mx-auto bg-white/95 backdrop-blur border border-neutral rounded-3xl shadow-2xl p-8 md:p-12 grid grid-cols-2 md:grid-cols-4 gap-8"
+          // PERUBAHAN: Menggunakan grid-cols-3 agar 3 item pas di tengah
+          className="max-w-6xl mx-auto bg-white/95 backdrop-blur border border-neutral rounded-3xl shadow-2xl p-8 md:p-12 grid grid-cols-1 md:grid-cols-3 gap-8"
         >
           {stats.map((stat) => (
-            <div key={stat.id} className="text-center border-r last:border-0 border-neutral/50">
+            <div key={stat.id} className="text-center md:border-r last:border-0 border-neutral/50 pb-6 md:pb-0 border-b md:border-b-0 last:pb-0 last:border-b-0">
               <h3 className="text-4xl md:text-5xl font-bold text-primary mb-2">{stat.value}</h3>
               <p className="text-secondary font-bold uppercase tracking-wider text-sm">{stat.label}</p>
             </div>
@@ -191,7 +200,7 @@ export default function Home() {
         </div>
       </section>
 
-      {/* 4. KEUNGGULAN (Background Neutral/Krem lembut) */}
+      {/* 4. KEUNGGULAN */}
       <section className="py-24 bg-neutral/20 relative">
         <div className="max-w-7xl mx-auto px-4 relative z-10">
           <div className="text-center mb-16">
@@ -276,7 +285,6 @@ export default function Home() {
       
       {/* 6. CTA Section */}
       <section className="py-20 bg-primary relative overflow-hidden">
-        {/* Pattern Background */}
         <div className="absolute inset-0 opacity-10" style={{ backgroundImage: 'radial-gradient(#E5D9B6 1px, transparent 1px)', backgroundSize: '20px 20px' }}></div>
         
         <div className="max-w-4xl mx-auto px-4 text-center relative z-10 text-white">
