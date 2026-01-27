@@ -18,9 +18,14 @@ Route::get('/berita/{id}', function ($id) { return response()->json(Berita::find
 // Kirim Surat (Warga)
 Route::post('/surat', [SuratController::class, 'store']);
 
-// 🔥 KHUSUS CETAK WORD (Sudah Diperbaiki)
-// Awalnya 'cetakPdf', sekarang diganti jadi 'cetakWord' sesuai nama fungsi di Controller
+// 🔥 CEK STATUS SURAT (BARU)
+Route::post('/cek-surat', [SuratController::class, 'cekStatus']);
+
+// Cetak Word
 Route::get('/surat/{id}/cetak', [SuratController::class, 'cetakWord']);
+
+// Pengaduan Warga
+Route::post('/pengaduan', [App\Http\Controllers\PengaduanController::class, 'store']);
 
 
 // --- PROTECTED ROUTES (Harus Login Admin) ---
@@ -30,7 +35,7 @@ Route::middleware('auth:sanctum')->group(function () {
     Route::get('/dashboard-stats', [DashboardController::class, 'index']);
     Route::post('/logout', [AuthController::class, 'logout']);
 
-    // Manajemen Surat (Hanya Data JSON)
+    // Manajemen Surat
     Route::get('/surat', [SuratController::class, 'index']); 
     Route::put('/surat/{id}', [SuratController::class, 'update']);
 
@@ -38,4 +43,9 @@ Route::middleware('auth:sanctum')->group(function () {
     Route::post('/berita', [BeritaController::class, 'store']);
     Route::put('/berita/{id}', [BeritaController::class, 'update']);
     Route::delete('/berita/{id}', [BeritaController::class, 'destroy']);
+
+    // Manajemen Pengaduan (Admin)
+    Route::get('/pengaduan', [App\Http\Controllers\PengaduanController::class, 'index']);
+    Route::put('/pengaduan/{id}', [App\Http\Controllers\PengaduanController::class, 'update']);
+    Route::delete('/pengaduan/{id}', [App\Http\Controllers\PengaduanController::class, 'destroy']);
 });

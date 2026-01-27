@@ -8,11 +8,13 @@ use PhpOffice\PhpWord\TemplateProcessor;
 
 class SuratController extends Controller
 {
+    // Ambil semua surat (untuk Admin Dashboard)
     public function index()
     {
         return response()->json(Surat::latest()->get());
     }
 
+    // Simpan surat baru (dari Warga)
     public function store(Request $request)
     {
         $validated = $request->validate([
@@ -42,6 +44,7 @@ class SuratController extends Controller
         return response()->json(['message' => 'Berhasil', 'data' => $surat], 201);
     }
 
+    // Update status surat (Admin klik Selesai)
     public function update(Request $request, $id)
     {
         $surat = Surat::find($id);
@@ -50,6 +53,7 @@ class SuratController extends Controller
         return response()->json(['message' => 'Status Updated', 'data' => $surat]);
     }
 
+    // 🔥 FITUR CETAK WORD (Lengkap dengan Tabel Otomatis)
     public function cetakWord($id)
     {
         $surat = Surat::find($id);
@@ -100,13 +104,40 @@ class SuratController extends Controller
             $templateProcessor->setValue('keterangan', ''); 
 
         } elseif ($surat->jenis_surat == 'Surat Keterangan Pindah') {
-            // Unpack Pindah: NIK KK ||| Nama KK ||| Alamat Tujuan ||| Alasan ||| Jumlah
+            // Unpack Pindah: NIK KK ||| Nama KK ||| Alamat Tujuan ||| Alasan ||| Jumlah ||| JSON_TABEL
             $data = explode('|||', $surat->keterangan);
+            
             $templateProcessor->setValue('nik_kk', $data[0] ?? '-');
             $templateProcessor->setValue('nama_kk', strtoupper($data[1] ?? '-'));
             $templateProcessor->setValue('alamat_pindah', $data[2] ?? '-');
             $templateProcessor->setValue('alasan_pindah', $data[3] ?? '-');
             $templateProcessor->setValue('jumlah_pindah', $data[4] ?? '-');
+            
+            // --- LOGIKA TABEL OTOMATIS (JSON) ---
+            $jsonAnggota = $data[5] ?? '[]'; // Ambil data ke-6 (JSON)
+            $listAnggota = json_decode($jsonAnggota, true); // Ubah jadi Array PHP
+
+            // Siapkan data untuk tabel Word
+            $values = [];
+            if (!empty($listAnggota)) {
+                $nomor = 1;
+                foreach($listAnggota as $anggota) {
+                    $values[] = [
+                        'tabel_no'   => $nomor++,
+                        'tabel_nama' => strtoupper($anggota['nama']),
+                        'tabel_ttl'  => $anggota['ttl'],
+                        'tabel_shdk' => $anggota['shdk'],
+                    ];
+                }
+                // Cloning baris tabel berdasarkan variabel 'tabel_nama'
+                $templateProcessor->cloneRowAndSetValues('tabel_nama', $values);
+            } else {
+                // Kalau kosong, hapus baris tabelnya
+                $templateProcessor->cloneRowAndSetValues('tabel_nama', [
+                    ['tabel_no' => '-', 'tabel_nama' => '-', 'tabel_ttl' => '-', 'tabel_shdk' => '-']
+                ]);
+            }
+
             $templateProcessor->setValue('keterangan', '');
 
         } elseif ($surat->jenis_surat == 'Surat Keterangan Telah Menikah') {
@@ -129,5 +160,26 @@ class SuratController extends Controller
         $templateProcessor->saveAs($savePath);
 
         return response()->download($savePath)->deleteFileAfterSend(true);
+    }
+
+    // 🔥 FITUR BARU: CEK STATUS SURAT (Untuk Warga)
+    public function cekStatus(Request $request)
+    {
+        // 1. Validasi Input (Wajib NIK)
+        $request->validate([
+            'nik' => 'required|string|min:16', // Minimal 16 angka
+        ]);
+
+        // 2. Cari di Database
+        $surat = Surat::where('nik', $request->nik)
+                      ->orderBy('created_at', 'desc') // Yang terbaru di atas
+                      ->get();
+
+        // 3. Respon
+        if ($surat->isEmpty()) {
+            return response()->json(['message' => 'Belum ada pengajuan surat untuk NIK ini.', 'data' => []], 404);
+        }
+
+        return response()->json(['message' => 'Data ditemukan', 'data' => $surat]);
     }
 }

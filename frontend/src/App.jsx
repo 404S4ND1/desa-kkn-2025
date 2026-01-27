@@ -10,7 +10,9 @@ import Wisata from './pages/Wisata';
 import WisataDetail from './pages/WisataDetail';
 import LayananSurat from './pages/LayananSurat';
 import Login from './pages/Login';
+import CekSurat from './pages/CekSurat'; // <--- 1. Import Halaman Baru
 import ProtectedRoute from './components/ProtectedRoute';
+import Pengaduan from './pages/Pengaduan';
 
 // Halaman Admin
 import AdminDashboard from './pages/AdminDashboard';
@@ -32,6 +34,11 @@ function App() {
         <Route path="/wisata" element={<Wisata />} />
         <Route path="/wisata/:id" element={<WisataDetail />} />
         <Route path="/layanan-surat" element={<LayananSurat />} />
+        <Route path="/pengaduan" element={<Pengaduan />} />
+        
+        {/* 🔥 2. Tambahkan Route Cek Surat di sini */}
+        <Route path="/cek-surat" element={<CekSurat />} /> 
+        
         <Route path="/login" element={<Login />} />
 
         {/* Rute Admin (Harus Login) */}
