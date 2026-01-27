@@ -6,30 +6,43 @@ use Illuminate\Support\Facades\Schema;
 
 return new class extends Migration
 {
-    public function up(): void
+    public function up()
     {
         Schema::create('surats', function (Blueprint $table) {
             $table->id();
-            // Data Pribadi Lengkap
+            
+            // 1. Data Pemohon (Wajib)
             $table->string('nik');
             $table->string('nama_pemohon');
-            $table->string('tempat_lahir'); // Baru
-            $table->date('tanggal_lahir');  // Baru
-            $table->string('jenis_kelamin'); // Baru
-            $table->string('pekerjaan');    // Baru
-            $table->string('agama');        // Baru
-            $table->text('alamat');         // Baru
+            $table->string('tempat_lahir');
+            $table->date('tanggal_lahir');
+            $table->string('jenis_kelamin');
+            $table->string('pekerjaan');
+            $table->string('agama');
+            $table->text('alamat');
             $table->string('no_hp');
-            
-            // Data Surat
+
+            // 2. Data Pasangan (Opsional - Bisa Kosong)
+            // Pakai ->nullable() supaya tidak error kalau suratnya bukan surat nikah
+            $table->string('nik_pasangan')->nullable();
+            $table->string('nama_pasangan')->nullable();
+            $table->string('tempat_lahir_pasangan')->nullable();
+            $table->date('tanggal_lahir_pasangan')->nullable();
+            $table->string('jenis_kelamin_pasangan')->nullable();
+            $table->string('pekerjaan_pasangan')->nullable();
+            $table->string('agama_pasangan')->nullable();
+            $table->text('alamat_pasangan')->nullable();
+
+            // 3. Data Surat & Detail (Isi paket "|||" masuk sini)
             $table->string('jenis_surat');
-            $table->text('keterangan')->nullable();
+            $table->text('keterangan')->nullable(); 
             $table->string('status')->default('Menunggu');
+
             $table->timestamps();
         });
     }
 
-    public function down(): void
+    public function down()
     {
         Schema::dropIfExists('surats');
     }

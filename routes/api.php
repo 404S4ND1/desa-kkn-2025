@@ -3,7 +3,7 @@
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 use App\Models\Berita;
-use App\Http\Controllers\SuratController; // Pastikan cuma dipanggil 1x
+use App\Http\Controllers\SuratController; 
 use App\Http\Controllers\Api\AuthController;
 use App\Http\Controllers\Api\DashboardController;
 use App\Http\Controllers\Api\BeritaController;
@@ -18,8 +18,9 @@ Route::get('/berita/{id}', function ($id) { return response()->json(Berita::find
 // Kirim Surat (Warga)
 Route::post('/surat', [SuratController::class, 'store']);
 
-// 🔥 KHUSUS CETAK PDF (Harus di sini, JANGAN dipindah ke dalam middleware)
-Route::get('/surat/{id}/cetak', [SuratController::class, 'cetakPdf']);
+// 🔥 KHUSUS CETAK WORD (Sudah Diperbaiki)
+// Awalnya 'cetakPdf', sekarang diganti jadi 'cetakWord' sesuai nama fungsi di Controller
+Route::get('/surat/{id}/cetak', [SuratController::class, 'cetakWord']);
 
 
 // --- PROTECTED ROUTES (Harus Login Admin) ---
