@@ -1,11 +1,11 @@
 import { useState, useEffect } from 'react';
 import api from '../api';
 import { 
-  ArrowLeft, Trash2, CheckCircle, AlertCircle, Clock, 
-  MessageSquare, Search, Filter, X, Image as ImageIcon, Send 
+  Trash2, CheckCircle, AlertCircle, Clock, 
+  Search, Filter, X, Image as ImageIcon 
 } from 'lucide-react';
-import { Link } from 'react-router-dom';
 import { motion, AnimatePresence } from 'framer-motion';
+import AdminLayout from '../components/AdminLayout';
 
 export default function PengaduanAdmin() {
   const [laporan, setLaporan] = useState([]);
@@ -37,20 +37,15 @@ export default function PengaduanAdmin() {
   // Logika Filter & Search
   useEffect(() => {
     let result = laporan;
-
-    // Filter Tab
     if (filterStatus !== 'Semua') {
       result = result.filter(item => item.status === filterStatus);
     }
-
-    // Filter Search
     if (searchTerm) {
       result = result.filter(item => 
         item.nama_pelapor.toLowerCase().includes(searchTerm.toLowerCase()) ||
         item.judul_laporan.toLowerCase().includes(searchTerm.toLowerCase())
       );
     }
-
     setFilteredLaporan(result);
   }, [laporan, filterStatus, searchTerm]);
 
@@ -58,13 +53,10 @@ export default function PengaduanAdmin() {
   const handleStatus = async (id, newStatus) => {
     try {
       await api.put(`/pengaduan/${id}`, { status: newStatus });
-      
-      // Update state lokal biar gak perlu fetch ulang (lebih cepat)
       const updated = laporan.map(item => 
         item.id === id ? { ...item, status: newStatus } : item
       );
       setLaporan(updated);
-      
       if (selectedItem) setSelectedItem({ ...selectedItem, status: newStatus });
     } catch (error) {
       alert("Gagal update status");
@@ -77,30 +69,20 @@ export default function PengaduanAdmin() {
     try {
       await api.delete(`/pengaduan/${id}`);
       setLaporan(prev => prev.filter(item => item.id !== id));
-      setSelectedItem(null); // Tutup modal jika yang dihapus sedang dibuka
+      setSelectedItem(null);
     } catch (error) {
       alert("Gagal menghapus");
     }
   };
 
-  // URL Helper untuk Gambar
   const getImageUrl = (path) => `http://localhost:8000/storage/${path}`;
 
   return (
-    <div className="min-h-screen bg-slate-50 p-6 md:p-10 font-sans text-slate-900">
-      <div className="max-w-7xl mx-auto">
-        
-        {/* HEADER */}
+    <AdminLayout title="Pusat Pengaduan">
+        {/* HEADER CUSTOM HALAMAN INI */}
         <div className="flex flex-col md:flex-row justify-between items-start md:items-center mb-8 gap-4">
             <div>
-                <Link to="/admin-dashboard" className="text-slate-500 hover:text-blue-600 flex items-center gap-1 text-sm font-semibold mb-2 transition-colors">
-                    <ArrowLeft size={16} /> Kembali ke Dashboard
-                </Link>
-                <h1 className="text-3xl font-bold text-slate-800 flex items-center gap-2">
-                    <MessageSquare className="text-blue-600" size={32}/> 
-                    Pusat Pengaduan
-                </h1>
-                <p className="text-slate-500 text-sm mt-1">Pantau dan tindak lanjuti aspirasi warga desa.</p>
+                <p className="text-slate-500 text-sm">Pantau dan tindak lanjuti aspirasi warga desa.</p>
             </div>
             
             {/* SEARCH BAR */}
@@ -149,7 +131,6 @@ export default function PengaduanAdmin() {
                         onClick={() => setSelectedItem(item)}
                         className="bg-white rounded-2xl shadow-sm border border-slate-200 overflow-hidden cursor-pointer hover:shadow-xl hover:-translate-y-1 transition-all group"
                     >
-                        {/* Status Badge di Pojok */}
                         <div className="relative h-40 overflow-hidden bg-slate-100">
                             {item.foto_bukti ? (
                                 <img src={getImageUrl(item.foto_bukti)} alt="Bukti" className="w-full h-full object-cover transition-transform duration-500 group-hover:scale-110" />
@@ -169,7 +150,7 @@ export default function PengaduanAdmin() {
                                 {item.judul_laporan}
                             </h3>
                             <p className="text-xs text-slate-400 mb-4 flex items-center gap-1">
-                                <Clock size={12}/> {new Date(item.created_at).toLocaleDateString('id-ID', {day: 'numeric', month: 'long', year: 'numeric'})}
+                                <Clock size={12}/> {new Date(item.created_at).toLocaleDateString('id-ID')}
                             </p>
                             <p className="text-slate-600 text-sm line-clamp-2 mb-4">
                                 {item.isi_laporan}
@@ -263,8 +244,7 @@ export default function PengaduanAdmin() {
             </motion.div>
         )}
         </AnimatePresence>
-      </div>
-    </div>
+    </AdminLayout>
   );
 }
 

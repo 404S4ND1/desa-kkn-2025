@@ -1,6 +1,7 @@
 import { useState, useEffect } from 'react';
 import api from '../api'; 
 import { FileText, Printer, CheckCircle, Clock } from 'lucide-react';
+import AdminLayout from '../components/AdminLayout';
 
 export default function SuratAdmin() {
   const [suratList, setSuratList] = useState([]);
@@ -35,17 +36,17 @@ export default function SuratAdmin() {
   };
 
   return (
-    <div className="p-6 bg-slate-50 min-h-screen">
+    <AdminLayout title="Verifikasi Surat">
       <div className="flex justify-between items-center mb-6">
-        <h1 className="text-2xl font-bold text-slate-800 flex items-center gap-2">
-          <FileText className="text-blue-600" /> Manajemen Surat Masuk
-        </h1>
-        <button onClick={fetchSurat} className="px-4 py-2 text-sm text-blue-600 border border-blue-200 rounded bg-white hover:bg-blue-50">
-          Refresh
+        <h2 className="text-xl font-bold text-slate-800 flex items-center gap-2">
+          Daftar Permohonan Warga
+        </h2>
+        <button onClick={fetchSurat} className="px-4 py-2 text-sm text-blue-600 border border-blue-200 rounded-xl bg-white hover:bg-blue-50 transition">
+          Refresh Data
         </button>
       </div>
 
-      <div className="bg-white rounded-xl shadow-sm border border-slate-200 overflow-hidden">
+      <div className="bg-white rounded-2xl shadow-sm border border-slate-200 overflow-hidden">
         <table className="w-full text-left border-collapse">
           <thead className="bg-slate-100 text-slate-600 uppercase text-xs font-bold">
             <tr>
@@ -89,8 +90,6 @@ export default function SuratAdmin() {
                   </td>
                   <td className="p-4 text-center">
                     <div className="flex justify-center gap-2">
-                      
-                      {/* 🔥 TOMBOL PRINT MERAH */}
                       <a 
                         href={`http://127.0.0.1:8000/api/surat/${surat.id}/cetak`} 
                         target="_blank" 
@@ -101,7 +100,6 @@ export default function SuratAdmin() {
                         <Printer size={16} /> Print
                       </a>
 
-                      {/* Tombol Acc */}
                       {surat.status !== 'Selesai' && (
                         <button 
                           onClick={() => handleStatus(surat.id)}
@@ -118,6 +116,6 @@ export default function SuratAdmin() {
           </tbody>
         </table>
       </div>
-    </div>
+    </AdminLayout>
   );
 }
