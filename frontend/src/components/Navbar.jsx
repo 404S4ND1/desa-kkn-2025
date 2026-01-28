@@ -75,7 +75,7 @@ export default function Navbar() {
                     Layanan <ChevronDown size={16} />
                 </button>
                 
-                <div className={`absolute top-full left-0 mt-2 w-56 bg-white rounded-xl shadow-xl border border-slate-100 transform transition-all duration-200 origin-top-left overflow-hidden ${dropdownOpen ? 'opacity-100 scale-100 visible' : 'opacity-0 scale-95 invisible'}`}>
+                <div className={`absolute top-full left-0 mt-2 w-60 bg-white rounded-xl shadow-xl border border-slate-100 transform transition-all duration-200 origin-top-left overflow-hidden ${dropdownOpen ? 'opacity-100 scale-100 visible' : 'opacity-0 scale-95 invisible'}`}>
                     <Link to="/layanan-surat" className="block px-4 py-3 text-sm text-slate-700 hover:bg-blue-50 hover:text-blue-600 transition">
                         ✍️ Buat Surat Baru
                     </Link>
@@ -86,6 +86,11 @@ export default function Navbar() {
                     <div className="border-t border-slate-100"></div>
                     <Link to="/pengaduan" className="block px-4 py-3 text-sm text-slate-700 hover:bg-red-50 hover:text-red-600 transition">
                         📢 Lapor Pengaduan
+                    </Link>
+                    {/* 🔥 MENU BARU PETA LOKASI 🔥 */}
+                    <div className="border-t border-slate-100"></div>
+                    <Link to="/peta-lokasi" className="block px-4 py-3 text-sm text-slate-700 hover:bg-green-50 hover:text-green-600 transition">
+                        🗺️ Peta & Lokasi
                     </Link>
                 </div>
             </div>
@@ -131,8 +136,12 @@ export default function Navbar() {
                 <Link to="/cek-surat" className="block px-4 py-2 rounded-lg hover:bg-blue-50 text-primary font-medium mb-1" onClick={() => setIsOpen(false)}>
                    🔍 Cek Status Surat
                 </Link>
-                <Link to="/pengaduan" className="block px-4 py-2 rounded-lg hover:bg-red-50 text-red-600 font-medium" onClick={() => setIsOpen(false)}>
+                <Link to="/pengaduan" className="block px-4 py-2 rounded-lg hover:bg-red-50 text-red-600 font-medium mb-1" onClick={() => setIsOpen(false)}>
                    📢 Lapor Pengaduan
+                </Link>
+                {/* 🔥 MENU MOBILE PETA 🔥 */}
+                <Link to="/peta-lokasi" className="block px-4 py-2 rounded-lg hover:bg-green-50 text-green-600 font-medium" onClick={() => setIsOpen(false)}>
+                   🗺️ Peta & Lokasi
                 </Link>
             </div>
 

@@ -14,13 +14,16 @@ import CekSurat from './pages/CekSurat';
 import ProtectedRoute from './components/ProtectedRoute';
 import Pengaduan from './pages/Pengaduan';
 
+// Import Halaman Baru
+import PetaLokasi from './pages/PetaLokasi'; // 🔥 Import PetaLokasi
+
 // Halaman Admin
 import AdminDashboard from './pages/AdminDashboard';
 import SuratAdmin from './pages/SuratAdmin';
 import BeritaAdmin from './pages/BeritaAdmin';
 import PengaduanAdmin from './pages/PengaduanAdmin'; 
 import UmkmAdmin from './pages/UmkmAdmin';      
-import WisataAdmin from './pages/WisataAdmin'; // 🔥 Import Wisata
+import WisataAdmin from './pages/WisataAdmin'; 
 
 function App() {
   return (
@@ -40,6 +43,9 @@ function App() {
         <Route path="/pengaduan" element={<Pengaduan />} />
         <Route path="/cek-surat" element={<CekSurat />} /> 
         <Route path="/login" element={<Login />} />
+        
+        {/* 🔥 Tambahkan Route Peta Lokasi */}
+        <Route path="/peta-lokasi" element={<PetaLokasi />} />
 
         {/* Rute Admin (Harus Login) */}
         <Route element={<ProtectedRoute />}>
@@ -48,8 +54,6 @@ function App() {
           <Route path="/berita-admin" element={<BeritaAdmin />} />
           <Route path="/pengaduan-admin" element={<PengaduanAdmin />} />
           <Route path="/umkm-admin" element={<UmkmAdmin />} /> 
-          
-          {/* 🔥 Tambahkan Route Wisata Admin */}
           <Route path="/wisata-admin" element={<WisataAdmin />} /> 
         </Route>
       </Routes>
