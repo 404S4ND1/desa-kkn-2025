@@ -3,7 +3,8 @@ import { Link, useNavigate, useLocation } from 'react-router-dom';
 import api from '../api';
 import { 
   LayoutDashboard, FileText, Newspaper, LogOut, 
-  Home, MessageSquare, Menu, X, PanelLeft
+  Home, MessageSquare, Menu, X, PanelLeft,
+  Store, Mountain // 🔥 Import Ikon Baru
 } from 'lucide-react';
 
 export default function AdminLayout({ children, title }) {
@@ -39,7 +40,6 @@ export default function AdminLayout({ children, title }) {
         const userRes = await api.get('/user');
         setUser(userRes.data);
         
-        // Ambil data stats untuk badge sidebar (opsional, biar realtime)
         const statRes = await api.get('/dashboard-stats');
         setStats(statRes.data);
       } catch (error) {
@@ -90,11 +90,16 @@ export default function AdminLayout({ children, title }) {
             <nav className="flex-1 p-4 space-y-2 overflow-y-auto custom-scrollbar">
               <NavItem to="/admin-dashboard" icon={<LayoutDashboard size={20}/>} label="Dashboard" active={location.pathname === '/admin-dashboard'} />
               
-              <p className="px-4 text-xs font-bold text-neutral/50 uppercase tracking-wider mt-6 mb-2 whitespace-nowrap">Layanan Desa</p>
+              <p className="px-4 text-xs font-bold text-white/50 uppercase tracking-wider mt-6 mb-2 whitespace-nowrap">Layanan Desa</p>
               <NavItem to="/surat-admin" icon={<FileText size={20}/>} label="Verifikasi Surat" active={location.pathname === '/surat-admin'} badge={stats.surat_terbaru?.filter(s => s.status === 'Pending').length} />
               <NavItem to="/pengaduan-admin" icon={<MessageSquare size={20}/>} label="Pengaduan Warga" active={location.pathname === '/pengaduan-admin'} badge={stats.total_pengaduan} badgeColor="bg-accent" />
               
-              <p className="px-4 text-xs font-bold text-neutral/50 uppercase tracking-wider mt-6 mb-2 whitespace-nowrap">Konten Website</p>
+              {/* 🔥 MENU BARU POTENSI DESA 🔥 */}
+              <p className="px-4 text-xs font-bold text-white/50 uppercase tracking-wider mt-6 mb-2 whitespace-nowrap">Potensi Desa</p>
+              <NavItem to="/umkm-admin" icon={<Store size={20}/>} label="Kelola UMKM" active={location.pathname === '/umkm-admin'} />
+              <NavItem to="/wisata-admin" icon={<Mountain size={20}/>} label="Kelola Wisata" active={location.pathname === '/wisata-admin'} />
+
+              <p className="px-4 text-xs font-bold text-white/50 uppercase tracking-wider mt-6 mb-2 whitespace-nowrap">Konten Website</p>
               <NavItem to="/berita-admin" icon={<Newspaper size={20}/>} label="Kelola Berita" active={location.pathname === '/berita-admin'} />
               
               <div className="pt-6 mt-4 border-t border-white/10">
