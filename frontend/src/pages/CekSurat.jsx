@@ -3,6 +3,7 @@ import api from '../api';
 import { Search, Clock, CheckCircle, FileText, AlertCircle, ArrowLeft, XCircle } from 'lucide-react';
 import { Link } from 'react-router-dom';
 import { motion, AnimatePresence } from 'framer-motion';
+import Swal from 'sweetalert2';
 
 export default function CekSurat() {
   const [nik, setNik] = useState('');
@@ -13,7 +14,12 @@ export default function CekSurat() {
   const handleCek = async (e) => {
     e.preventDefault();
     if (nik.length < 16) {
-      setErrorMsg("NIK harus 16 digit angka.");
+      Swal.fire({
+        icon: 'warning',
+        title: 'NIK Tidak Valid',
+        text: 'Mohon masukkan 16 digit angka NIK dengan benar.',
+        confirmButtonColor: '#2563eb'
+      });
       return;
     }
 
@@ -24,11 +30,34 @@ export default function CekSurat() {
     try {
       const response = await api.post('/cek-surat', { nik });
       setHasil(response.data.data);
+      
+      // Opsional: Beri notifikasi kecil jika data ditemukan
+      if(response.data.data.length > 0) {
+        const Toast = Swal.mixin({
+            toast: true,
+            position: 'top',
+            showConfirmButton: false,
+            timer: 3000,
+            background: '#ecfdf5', // hijau muda
+            color: '#047857' // hijau tua
+        });
+        Toast.fire({
+            icon: 'success',
+            title: `Ditemukan ${response.data.data.length} surat`
+        });
+      }
+
     } catch (error) {
       if (error.response && error.response.status === 404) {
         setHasil([]); // Data kosong (bukan error server)
       } else {
-        setErrorMsg("Terjadi kesalahan sistem. Pastikan server menyala.");
+        setErrorMsg("Terjadi kesalahan sistem.");
+        Swal.fire({
+            icon: 'error',
+            title: 'Terjadi Kesalahan',
+            text: 'Gagal menghubungi server. Silakan coba lagi nanti.',
+            confirmButtonColor: '#dc2626'
+        });
       }
     } finally {
       setLoading(false);
@@ -96,16 +125,13 @@ export default function CekSurat() {
                   initial={{ opacity: 0, y: 20 }}
                   animate={{ opacity: 1, y: 0 }}
                   transition={{ delay: index * 0.1 }}
-                  // PERBAIKAN RESPONSIVITAS DI SINI:
-                  // flex-col untuk mobile, sm:flex-row untuk tablet ke atas
                   className="bg-white p-5 sm:p-6 rounded-2xl shadow-sm border border-slate-100 hover:shadow-md transition-shadow flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4"
                 >
                   <div className="flex items-start gap-4 w-full">
-                    {/* Icon tetap hidden di mobile agar hemat tempat, muncul di layar besar */}
                     <div className="bg-blue-50 p-3 rounded-xl text-blue-600 hidden sm:block shrink-0">
                       <FileText size={24} />
                     </div>
-                    <div className="flex-1 min-w-0"> {/* min-w-0 penting untuk text truncate/wrap di flex item */}
+                    <div className="flex-1 min-w-0">
                       <h3 className="font-bold text-slate-800 text-lg leading-snug break-words">
                         {item.jenis_surat}
                       </h3>
@@ -120,7 +146,6 @@ export default function CekSurat() {
 
                   {/* Bagian Status */}
                   <div className="flex flex-row sm:flex-col items-center sm:items-end justify-between w-full sm:w-auto mt-2 sm:mt-0 pt-3 sm:pt-0 border-t sm:border-0 border-slate-100">
-                    {/* Label Status muncul di mobile untuk kejelasan */}
                     <span className="text-xs text-slate-400 font-medium sm:hidden">Status Pengajuan:</span>
                     <StatusBadge status={item.status} />
                   </div>
