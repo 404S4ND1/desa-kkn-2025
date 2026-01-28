@@ -2,10 +2,10 @@ import { useState, useEffect } from 'react';
 import api from '../api';
 import { 
   Trash2, CheckCircle, AlertCircle, Clock, 
-  Search, Filter, X, Image as ImageIcon 
+  Search, Filter, X, Image as ImageIcon, MapPin 
 } from 'lucide-react';
 import { motion, AnimatePresence } from 'framer-motion';
-import AdminLayout from '../components/AdminLayout';
+import AdminLayout from '../components/AdminLayout'; // Pastikan path ini benar
 
 export default function PengaduanAdmin() {
   const [laporan, setLaporan] = useState([]);
@@ -143,6 +143,13 @@ export default function PengaduanAdmin() {
                             <div className="absolute top-3 right-3">
                                 <StatusBadge status={item.status} />
                             </div>
+
+                            {/* 🔥 TAMBAHAN: Overlay Lokasi di Thumbnail */}
+                            <div className="absolute bottom-0 left-0 right-0 bg-gradient-to-t from-black/80 via-black/40 to-transparent p-3 pt-8">
+                                <p className="text-white text-xs flex items-center gap-1 font-medium">
+                                    <MapPin size={12} className="text-red-400"/> {item.lokasi || 'Lokasi tidak ada'}
+                                </p>
+                            </div>
                         </div>
 
                         <div className="p-5">
@@ -209,6 +216,17 @@ export default function PengaduanAdmin() {
                             </div>
                         )}
                         
+                        {/* 🔥 TAMBAHAN: Detail Lokasi di Modal */}
+                        <div className="bg-blue-50 p-4 rounded-xl border border-blue-100 mb-6 flex items-start gap-4">
+                            <div className="bg-white p-2 rounded-lg shadow-sm text-blue-600">
+                                <MapPin size={24}/>
+                            </div>
+                            <div>
+                                <h4 className="font-bold text-blue-800 text-sm uppercase tracking-wide mb-1">Lokasi Kejadian</h4>
+                                <p className="text-blue-700 font-medium text-lg">{selectedItem.lokasi || '-'}</p>
+                            </div>
+                        </div>
+
                         {/* Isi Laporan */}
                         <div className="prose prose-slate max-w-none">
                             <h4 className="font-bold text-slate-800 text-sm uppercase tracking-wide mb-2">Detail Kejadian</h4>

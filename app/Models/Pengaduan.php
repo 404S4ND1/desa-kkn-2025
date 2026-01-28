@@ -9,12 +9,12 @@ class Pengaduan extends Model
 {
     use HasFactory;
 
-    // 🔥 PENTING: Daftarkan semua kolom yang boleh diisi lewat Form
     protected $fillable = [
         'nama_pelapor',
         'nik',
         'no_hp',
         'judul_laporan',
+        'lokasi', // 🔥 TAMBAHKAN INI
         'isi_laporan',
         'foto_bukti',
         'status',

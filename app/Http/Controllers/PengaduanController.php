@@ -15,20 +15,20 @@ class PengaduanController extends Controller
             'nama_pelapor' => 'required',
             'no_hp' => 'required',
             'judul_laporan' => 'required',
+            'lokasi' => 'required', // 🔥 Lokasi Wajib
             'isi_laporan' => 'required',
-            'foto_bukti' => 'nullable|image|max:5120'
+            'foto_bukti' => 'required|image|max:5120' // 🔥 Foto Wajib (required)
         ]);
 
-        $path = null;
-        if ($request->hasFile('foto_bukti')) {
-            $path = $request->file('foto_bukti')->store('pengaduan', 'public');
-        }
+        // Karena foto wajib, kita langsung simpan tanpa 'if'
+        $path = $request->file('foto_bukti')->store('pengaduan', 'public');
 
         Pengaduan::create([
             'nama_pelapor' => $request->nama_pelapor,
             'nik' => $request->nik,
             'no_hp' => $request->no_hp,
             'judul_laporan' => $request->judul_laporan,
+            'lokasi' => $request->lokasi, // 🔥 Simpan Lokasi
             'isi_laporan' => $request->isi_laporan,
             'foto_bukti' => $path,
             'status' => 'Menunggu'
@@ -50,7 +50,7 @@ class PengaduanController extends Controller
         if (!$pengaduan) return response()->json(['message' => 'Not Found'], 404);
 
         $pengaduan->update([
-            'status' => $request->status, // 'Diproses' atau 'Selesai'
+            'status' => $request->status,
             'tanggapan_desa' => $request->tanggapan_desa
         ]);
 
