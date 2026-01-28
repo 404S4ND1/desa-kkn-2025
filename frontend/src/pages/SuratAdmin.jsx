@@ -38,17 +38,17 @@ export default function SuratAdmin() {
   return (
     <AdminLayout title="Verifikasi Surat">
       <div className="flex justify-between items-center mb-6">
-        <h2 className="text-xl font-bold text-slate-800 flex items-center gap-2">
+        <h2 className="text-xl font-bold text-primary flex items-center gap-2">
           Daftar Permohonan Warga
         </h2>
-        <button onClick={fetchSurat} className="px-4 py-2 text-sm text-blue-600 border border-blue-200 rounded-xl bg-white hover:bg-blue-50 transition">
+        <button onClick={fetchSurat} className="px-4 py-2 text-sm text-primary border border-primary/20 rounded-xl bg-white hover:bg-neutral/30 transition font-medium">
           Refresh Data
         </button>
       </div>
 
-      <div className="bg-white rounded-2xl shadow-sm border border-slate-200 overflow-hidden">
+      <div className="bg-white rounded-2xl shadow-sm border border-neutral/20 overflow-hidden">
         <table className="w-full text-left border-collapse">
-          <thead className="bg-slate-100 text-slate-600 uppercase text-xs font-bold">
+          <thead className="bg-neutral/20 text-primary/80 uppercase text-xs font-bold">
             <tr>
               <th className="p-4">Tanggal</th>
               <th className="p-4">Pemohon</th>
@@ -57,33 +57,33 @@ export default function SuratAdmin() {
               <th className="p-4 text-center">Aksi</th>
             </tr>
           </thead>
-          <tbody className="divide-y divide-slate-100">
+          <tbody className="divide-y divide-neutral/10">
             {loading ? (
-              <tr><td colSpan="5" className="p-8 text-center text-slate-500">Memuat data...</td></tr>
+              <tr><td colSpan="5" className="p-8 text-center text-secondary">Memuat data...</td></tr>
             ) : suratList.length === 0 ? (
-              <tr><td colSpan="5" className="p-8 text-center text-slate-400">Belum ada surat masuk.</td></tr>
+              <tr><td colSpan="5" className="p-8 text-center text-secondary/70">Belum ada surat masuk.</td></tr>
             ) : (
               suratList.map((surat) => (
-                <tr key={surat.id} className="hover:bg-slate-50 transition-colors">
-                  <td className="p-4 text-sm text-slate-500">
+                <tr key={surat.id} className="hover:bg-surface transition-colors">
+                  <td className="p-4 text-sm text-secondary">
                     {new Date(surat.created_at).toLocaleDateString('id-ID')}
                   </td>
                   <td className="p-4">
-                    <div className="font-bold text-slate-800">{surat.nama_pemohon}</div>
-                    <div className="text-xs text-slate-500">NIK: {surat.nik || surat.nik_pemohon}</div>
+                    <div className="font-bold text-primary">{surat.nama_pemohon}</div>
+                    <div className="text-xs text-secondary">NIK: {surat.nik || surat.nik_pemohon}</div>
                   </td>
                   <td className="p-4">
-                    <span className="bg-blue-100 text-blue-800 text-xs px-2 py-1 rounded-full font-medium">
+                    <span className="bg-neutral text-primary text-xs px-2 py-1 rounded-full font-bold border border-primary/10">
                       {surat.jenis_surat}
                     </span>
                   </td>
                   <td className="p-4">
                     {surat.status === 'Selesai' ? (
-                      <span className="flex items-center gap-1 text-green-600 text-sm font-bold">
-                        <CheckCircle size={16} /> Selesai
+                      <span className="flex items-center gap-1 text-primary text-sm font-bold">
+                        <CheckCircle size={16} className="text-secondary" /> Selesai
                       </span>
                     ) : (
-                      <span className="flex items-center gap-1 text-yellow-600 text-sm font-bold">
+                      <span className="flex items-center gap-1 text-accent text-sm font-bold">
                         <Clock size={16} /> Menunggu
                       </span>
                     )}
@@ -94,7 +94,7 @@ export default function SuratAdmin() {
                         href={`http://127.0.0.1:8000/api/surat/${surat.id}/cetak`} 
                         target="_blank" 
                         rel="noopener noreferrer"
-                        className="flex items-center gap-1 bg-red-500 hover:bg-red-600 text-white px-3 py-1.5 rounded text-sm font-medium transition shadow-sm"
+                        className="flex items-center gap-1 bg-accent hover:bg-orange-600 text-white px-3 py-1.5 rounded-lg text-sm font-bold transition shadow-sm"
                         title="Cetak PDF"
                       >
                         <Printer size={16} /> Print
@@ -103,7 +103,7 @@ export default function SuratAdmin() {
                       {surat.status !== 'Selesai' && (
                         <button 
                           onClick={() => handleStatus(surat.id)}
-                          className="flex items-center gap-1 bg-green-500 hover:bg-green-600 text-white px-3 py-1.5 rounded text-sm font-medium transition shadow-sm"
+                          className="flex items-center gap-1 bg-primary hover:bg-primary/90 text-white px-3 py-1.5 rounded-lg text-sm font-bold transition shadow-sm"
                         >
                           <CheckCircle size={16} /> Acc
                         </button>

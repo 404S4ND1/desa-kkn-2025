@@ -17,11 +17,9 @@ export default function Login() {
     try {
       const response = await api.post('/login', { email, password });
       
-      // Simpan token & user ke LocalStorage
       localStorage.setItem('token', response.data.access_token);
       localStorage.setItem('user_name', response.data.user.name);
 
-      // Redirect ke Dashboard
       navigate('/admin-dashboard'); 
     } catch (err) {
       setError('Login Gagal! Periksa email dan password.');
@@ -31,33 +29,42 @@ export default function Login() {
   };
 
   return (
-    <div className="min-h-screen flex items-center justify-center bg-slate-100">
-      <div className="bg-white p-8 rounded-xl shadow-md w-full max-w-sm">
-        <h1 className="text-2xl font-bold text-center mb-6 text-slate-800">Admin Login</h1>
+    <div className="min-h-screen flex items-center justify-center bg-surface px-4">
+      <div className="bg-white p-8 rounded-3xl shadow-xl w-full max-w-sm border border-neutral/20">
         
-        {error && <div className="bg-red-100 text-red-600 p-3 rounded mb-4 text-sm">{error}</div>}
+        <div className="text-center mb-8">
+            <div className="w-16 h-16 bg-primary text-white rounded-2xl flex items-center justify-center text-3xl shadow-lg mx-auto mb-4">
+                🏛️
+            </div>
+            <h1 className="text-2xl font-bold text-primary">Admin Desa</h1>
+            <p className="text-secondary text-sm">Silakan masuk untuk mengelola data.</p>
+        </div>
+        
+        {error && <div className="bg-red-50 text-red-600 p-3 rounded-xl mb-4 text-sm font-medium border border-red-100 text-center">{error}</div>}
 
-        <form onSubmit={handleLogin} className="space-y-4">
+        <form onSubmit={handleLogin} className="space-y-5">
           <div>
-            <label className="block text-sm font-medium text-slate-700">Email</label>
+            <label className="block text-sm font-bold text-primary mb-1.5">Email</label>
             <input 
               type="email" 
-              className="w-full border px-3 py-2 rounded focus:ring-2 focus:ring-blue-500 outline-none"
+              className="w-full border border-neutral/30 px-4 py-3 rounded-xl focus:ring-2 focus:ring-accent outline-none bg-surface transition-all"
               value={email} onChange={(e) => setEmail(e.target.value)} required 
+              placeholder="admin@desa.id"
             />
           </div>
           <div>
-            <label className="block text-sm font-medium text-slate-700">Password</label>
+            <label className="block text-sm font-bold text-primary mb-1.5">Password</label>
             <input 
               type="password" 
-              className="w-full border px-3 py-2 rounded focus:ring-2 focus:ring-blue-500 outline-none"
+              className="w-full border border-neutral/30 px-4 py-3 rounded-xl focus:ring-2 focus:ring-accent outline-none bg-surface transition-all"
               value={password} onChange={(e) => setPassword(e.target.value)} required 
+              placeholder="••••••••"
             />
           </div>
           <button 
             disabled={loading}
-            className="w-full bg-blue-600 text-white py-2 rounded hover:bg-blue-700 transition disabled:bg-slate-400">
-            {loading ? 'Memproses...' : 'Masuk'}
+            className="w-full bg-primary text-white py-3.5 rounded-xl hover:bg-primary/90 transition-all font-bold shadow-lg shadow-primary/20 disabled:bg-neutral disabled:text-secondary">
+            {loading ? 'Memproses...' : 'Masuk Dashboard'}
           </button>
         </form>
       </div>

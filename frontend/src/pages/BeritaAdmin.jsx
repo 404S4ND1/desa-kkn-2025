@@ -90,47 +90,47 @@ export default function BeritaAdmin() {
       <div className="max-w-4xl mx-auto space-y-8">
         
         {/* --- FORM SECTION --- */}
-        <div className="bg-white p-6 rounded-2xl shadow-sm border border-slate-100">
-          <h2 className="text-xl font-bold mb-4 text-slate-800">
+        <div className="bg-white p-6 rounded-2xl shadow-sm border border-neutral/20">
+          <h2 className="text-xl font-bold mb-4 text-primary">
             {isEditing ? '✏️ Edit Berita' : '📝 Tambah Berita Baru'}
           </h2>
           <form onSubmit={handleSubmit} className="space-y-4">
             <div>
-              <label className="block text-sm font-medium text-slate-700 mb-1">Judul Berita</label>
+              <label className="block text-sm font-bold text-primary mb-1">Judul Berita</label>
               <input 
                 type="text" required
-                className="w-full border p-2.5 rounded-xl focus:ring-2 focus:ring-blue-500 outline-none"
+                className="w-full border border-neutral/20 p-3 rounded-xl focus:ring-2 focus:ring-accent outline-none bg-surface"
                 value={judul} onChange={(e) => setJudul(e.target.value)}
               />
             </div>
             
             <div>
-              <label className="block text-sm font-medium text-slate-700 mb-1">Upload Gambar (Opsional)</label>
+              <label className="block text-sm font-bold text-primary mb-1">Upload Gambar (Opsional)</label>
               <input 
                 id="fileInput"
                 type="file" 
                 accept="image/*"
-                className="w-full border p-2 rounded-xl"
+                className="w-full border border-neutral/20 p-2 rounded-xl bg-surface file:mr-4 file:py-2 file:px-4 file:rounded-full file:border-0 file:text-sm file:font-semibold file:bg-primary/10 file:text-primary hover:file:bg-primary/20"
                 onChange={(e) => setFileGambar(e.target.files[0])}
               />
-              <p className="text-xs text-gray-400 mt-1">Format: JPG, PNG, GIF. Max: 5MB.</p>
+              <p className="text-xs text-secondary mt-1">Format: JPG, PNG, GIF. Max: 5MB.</p>
             </div>
 
             <div>
-              <label className="block text-sm font-medium text-slate-700 mb-1">Isi Berita</label>
+              <label className="block text-sm font-bold text-primary mb-1">Isi Berita</label>
               <textarea 
                 rows="6" required
-                className="w-full border p-2.5 rounded-xl focus:ring-2 focus:ring-blue-500 outline-none"
+                className="w-full border border-neutral/20 p-3 rounded-xl focus:ring-2 focus:ring-accent outline-none bg-surface"
                 value={isi} onChange={(e) => setIsi(e.target.value)}
               ></textarea>
             </div>
 
             <div className="flex gap-2">
-              <button className="bg-blue-600 text-white px-5 py-2.5 rounded-xl hover:bg-blue-700 transition font-bold shadow-sm">
+              <button className="bg-primary text-white px-5 py-2.5 rounded-xl hover:bg-primary/90 transition font-bold shadow-sm shadow-primary/30">
                 {isEditing ? 'Simpan Perubahan' : 'Terbitkan Berita'}
               </button>
               {isEditing && (
-                <button type="button" onClick={resetForm} className="bg-slate-200 text-slate-700 px-5 py-2.5 rounded-xl hover:bg-slate-300 font-bold transition">
+                <button type="button" onClick={resetForm} className="bg-neutral text-primary px-5 py-2.5 rounded-xl hover:bg-neutral/80 font-bold transition">
                   Batal
                 </button>
               )}
@@ -139,13 +139,13 @@ export default function BeritaAdmin() {
         </div>
 
         {/* --- LIST SECTION --- */}
-        <div className="bg-white p-6 rounded-2xl shadow-sm border border-slate-100">
-          <h2 className="text-xl font-bold mb-4 text-slate-800">Daftar Berita</h2>
+        <div className="bg-white p-6 rounded-2xl shadow-sm border border-neutral/20">
+          <h2 className="text-xl font-bold mb-4 text-primary">Daftar Berita</h2>
           <div className="space-y-4">
             {beritaList.map((item) => (
-              <div key={item.id} className="flex gap-4 border-b pb-4 items-start last:border-0 border-slate-100">
+              <div key={item.id} className="flex gap-4 border-b pb-4 items-start last:border-0 border-neutral/20">
                 {/* Thumbnail */}
-                <div className="w-24 h-16 flex-shrink-0 bg-gray-100 rounded-lg overflow-hidden border border-slate-200">
+                <div className="w-24 h-16 flex-shrink-0 bg-neutral/20 rounded-xl overflow-hidden border border-neutral/20">
                     <img 
                         src={item.gambar_url} 
                         alt="thumb" 
@@ -155,23 +155,23 @@ export default function BeritaAdmin() {
                 </div>
 
                 <div className="flex-1">
-                  <h3 className="font-bold text-lg text-slate-800 line-clamp-1">{item.judul}</h3>
-                  <p className="text-slate-500 text-xs mt-1">
+                  <h3 className="font-bold text-lg text-primary line-clamp-1">{item.judul}</h3>
+                  <p className="text-secondary text-xs mt-1">
                     {new Date(item.created_at).toLocaleDateString('id-ID', {
                         day: 'numeric', month: 'long', year: 'numeric'
                     })}
                   </p>
-                  <p className="text-slate-600 text-sm line-clamp-1 mt-1">{item.isi}</p>
+                  <p className="text-primary/70 text-sm line-clamp-1 mt-1">{item.isi}</p>
                 </div>
 
                 <div className="flex gap-2">
-                  <button onClick={() => handleEdit(item)} className="text-yellow-600 hover:text-yellow-700 font-bold text-sm">Edit</button>
-                  <button onClick={() => handleDelete(item.id)} className="text-red-600 hover:text-red-700 font-bold text-sm">Hapus</button>
+                  <button onClick={() => handleEdit(item)} className="text-accent hover:text-orange-700 font-bold text-sm transition">Edit</button>
+                  <button onClick={() => handleDelete(item.id)} className="text-red-500 hover:text-red-700 font-bold text-sm transition">Hapus</button>
                 </div>
               </div>
             ))}
             {beritaList.length === 0 && (
-                <p className="text-center text-gray-500 py-4">Belum ada berita.</p>
+                <p className="text-center text-secondary py-4">Belum ada berita.</p>
             )}
           </div>
         </div>

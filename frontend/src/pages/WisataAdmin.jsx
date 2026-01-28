@@ -1,10 +1,10 @@
 import { useState, useEffect } from 'react';
 import api from '../api';
 import { 
-  Plus, Trash2, MapPin, MessageCircle, Ticket, User, X
+  Plus, Trash2, MapPin, MessageCircle, Ticket, User, X, Mountain
 } from 'lucide-react';
 import { motion, AnimatePresence } from 'framer-motion';
-import AdminLayout from '../components/AdminLayout'; // 🔥 Import Layout
+import AdminLayout from '../components/AdminLayout';
 
 export default function WisataAdmin() {
   const [wisataList, setWisataList] = useState([]);
@@ -81,7 +81,7 @@ export default function WisataAdmin() {
                 <h2 className="text-2xl font-bold text-primary">Destinasi Wisata</h2>
                 <p className="text-secondary text-sm">Kelola informasi objek wisata desa.</p>
             </div>
-            <button onClick={() => setIsModalOpen(true)} className="bg-primary hover:bg-primary/90 text-white px-5 py-2.5 rounded-xl font-bold shadow-lg flex items-center gap-2 transition transform hover:-translate-y-0.5">
+            <button onClick={() => setIsModalOpen(true)} className="bg-accent hover:bg-orange-700 text-white px-5 py-2.5 rounded-xl font-bold shadow-lg shadow-orange-500/20 flex items-center gap-2 transition transform hover:-translate-y-0.5">
                 <Plus size={20}/> Tambah Wisata
             </button>
         </div>
@@ -107,14 +107,14 @@ export default function WisataAdmin() {
                                 
                                 <div className="space-y-3 text-sm text-secondary mb-6 bg-surface p-3 rounded-xl border border-neutral/10">
                                     <div className="flex items-center gap-2"><MapPin size={16} className="text-red-500"/> <span className="truncate">{item.alamat}</span></div>
-                                    {item.pengelola && <div className="flex items-center gap-2"><User size={16} className="text-blue-500"/> {item.pengelola}</div>}
+                                    {item.pengelola && <div className="flex items-center gap-2"><User size={16} className="text-accent"/> {item.pengelola}</div>}
                                 </div>
 
                                 <div className="grid grid-cols-2 gap-2 mb-4">
                                     <a href={item.link_maps} target="_blank" rel="noreferrer" className="flex items-center justify-center gap-1 bg-white border border-neutral/20 text-primary py-2 rounded-lg text-sm font-bold hover:bg-surface transition">
                                         <MapPin size={16}/> Maps
                                     </a>
-                                    <a href={formatWaLink(item.no_wa)} target="_blank" rel="noreferrer" className="flex items-center justify-center gap-1 bg-green-100 text-green-700 py-2 rounded-lg text-sm font-bold hover:bg-green-200 transition">
+                                    <a href={formatWaLink(item.no_wa)} target="_blank" rel="noreferrer" className="flex items-center justify-center gap-1 bg-green-50 text-green-700 py-2 rounded-lg text-sm font-bold hover:bg-green-100 transition border border-green-200">
                                         <MessageCircle size={16}/> Info
                                     </a>
                                 </div>
@@ -128,6 +128,7 @@ export default function WisataAdmin() {
                 </div>
             ) : (
                 <div className="text-center py-20 bg-white rounded-2xl border border-dashed border-neutral/30">
+                    <div className="inline-block p-4 bg-surface rounded-full mb-4 text-secondary"><Mountain size={32}/></div>
                     <h3 className="font-bold text-primary text-lg">Belum ada data wisata</h3>
                     <p className="text-secondary">Silakan tambahkan destinasi wisata baru.</p>
                 </div>
@@ -147,34 +148,34 @@ export default function WisataAdmin() {
                     <form onSubmit={handleSubmit} className="space-y-4">
                         <div>
                             <label className="block text-sm font-bold text-primary mb-1">Nama Wisata</label>
-                            <input type="text" required className="w-full p-3 border border-neutral/20 rounded-xl focus:ring-2 focus:ring-primary/50 outline-none bg-surface" onChange={e => setFormData({...formData, nama_wisata: e.target.value})} />
+                            <input type="text" required className="w-full p-3 border border-neutral/20 rounded-xl focus:ring-2 focus:ring-accent outline-none bg-surface" onChange={e => setFormData({...formData, nama_wisata: e.target.value})} />
                         </div>
                         
                         <div className="grid grid-cols-2 gap-4">
                             <div>
                                 <label className="block text-sm font-bold text-primary mb-1">Harga Tiket</label>
-                                <input type="text" placeholder="Gratis / Rp 5.000" required className="w-full p-3 border border-neutral/20 rounded-xl focus:ring-2 focus:ring-primary/50 outline-none bg-surface" onChange={e => setFormData({...formData, harga_tiket: e.target.value})} />
+                                <input type="text" placeholder="Gratis / Rp 5.000" required className="w-full p-3 border border-neutral/20 rounded-xl focus:ring-2 focus:ring-accent outline-none bg-surface" onChange={e => setFormData({...formData, harga_tiket: e.target.value})} />
                             </div>
                             <div>
                                 <label className="block text-sm font-bold text-primary mb-1">No. Kontak</label>
-                                <input type="number" placeholder="08xxx" className="w-full p-3 border border-neutral/20 rounded-xl focus:ring-2 focus:ring-primary/50 outline-none bg-surface" onChange={e => setFormData({...formData, no_wa: e.target.value})} />
+                                <input type="number" placeholder="08xxx" className="w-full p-3 border border-neutral/20 rounded-xl focus:ring-2 focus:ring-accent outline-none bg-surface" onChange={e => setFormData({...formData, no_wa: e.target.value})} />
                             </div>
                         </div>
 
                         <div>
                             <label className="block text-sm font-bold text-primary mb-1">Lokasi / Alamat</label>
-                            <input type="text" required className="w-full p-3 border border-neutral/20 rounded-xl focus:ring-2 focus:ring-primary/50 outline-none bg-surface" onChange={e => setFormData({...formData, alamat: e.target.value})} />
+                            <input type="text" required className="w-full p-3 border border-neutral/20 rounded-xl focus:ring-2 focus:ring-accent outline-none bg-surface" onChange={e => setFormData({...formData, alamat: e.target.value})} />
                         </div>
 
                         <div>
                             <label className="block text-sm font-bold text-primary mb-1 flex items-center gap-1"><MapPin size={14} className="text-accent"/> Link Google Maps</label>
-                            <input type="url" placeholder="Link dari Google Maps..." required className="w-full p-3 border border-neutral/20 rounded-xl focus:ring-2 focus:ring-primary/50 outline-none bg-surface text-blue-600" onChange={e => setFormData({...formData, link_maps: e.target.value})} />
+                            <input type="url" placeholder="Link dari Google Maps..." required className="w-full p-3 border border-neutral/20 rounded-xl focus:ring-2 focus:ring-accent outline-none bg-surface text-accent" onChange={e => setFormData({...formData, link_maps: e.target.value})} />
                         </div>
 
                         <div className="grid grid-cols-2 gap-4">
                             <div>
                                 <label className="block text-sm font-bold text-primary mb-1">Kategori</label>
-                                <select className="w-full p-3 border border-neutral/20 rounded-xl bg-surface focus:ring-2 focus:ring-primary/50 outline-none" onChange={e => setFormData({...formData, kategori: e.target.value})}>
+                                <select className="w-full p-3 border border-neutral/20 rounded-xl bg-surface focus:ring-2 focus:ring-accent outline-none" onChange={e => setFormData({...formData, kategori: e.target.value})}>
                                     <option value="Alam">Wisata Alam</option>
                                     <option value="Buatan">Wisata Buatan</option>
                                     <option value="Religi">Wisata Religi</option>
@@ -183,18 +184,18 @@ export default function WisataAdmin() {
                             </div>
                             <div>
                                 <label className="block text-sm font-bold text-primary mb-1">Pengelola</label>
-                                <input type="text" placeholder="BUMDes / Pokdarwis" className="w-full p-3 border border-neutral/20 rounded-xl focus:ring-2 focus:ring-primary/50 outline-none bg-surface" onChange={e => setFormData({...formData, pengelola: e.target.value})} />
+                                <input type="text" placeholder="BUMDes / Pokdarwis" className="w-full p-3 border border-neutral/20 rounded-xl focus:ring-2 focus:ring-accent outline-none bg-surface" onChange={e => setFormData({...formData, pengelola: e.target.value})} />
                             </div>
                         </div>
 
                         <div>
                             <label className="block text-sm font-bold text-primary mb-1">Deskripsi & Fasilitas</label>
-                            <textarea required className="w-full p-3 border border-neutral/20 rounded-xl focus:ring-2 focus:ring-primary/50 outline-none bg-surface" rows="3" onChange={e => setFormData({...formData, deskripsi: e.target.value})}></textarea>
+                            <textarea required className="w-full p-3 border border-neutral/20 rounded-xl focus:ring-2 focus:ring-accent outline-none bg-surface" rows="3" onChange={e => setFormData({...formData, deskripsi: e.target.value})}></textarea>
                         </div>
 
                         <div>
                             <label className="block text-sm font-bold text-primary mb-1">Foto Lokasi</label>
-                            <input type="file" required accept="image/*" className="w-full p-2 border border-neutral/20 rounded-xl bg-surface" onChange={e => setFoto(e.target.files[0])} />
+                            <input type="file" required accept="image/*" className="w-full p-2 border border-neutral/20 rounded-xl bg-surface file:mr-4 file:py-2 file:px-4 file:rounded-full file:border-0 file:text-sm file:font-semibold file:bg-primary/10 file:text-primary hover:file:bg-primary/20" onChange={e => setFoto(e.target.files[0])} />
                         </div>
 
                         <button disabled={submitLoading} className="w-full bg-primary text-white py-3.5 rounded-xl font-bold hover:bg-primary/90 transition shadow-lg mt-6 flex justify-center items-center gap-2">
