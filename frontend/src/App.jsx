@@ -9,16 +9,18 @@ import UmkmDetail from './pages/UmkmDetail';
 import Wisata from './pages/Wisata';
 import WisataDetail from './pages/WisataDetail';
 import LayananSurat from './pages/LayananSurat';
-import Pengaduan from './pages/Pengaduan';
 import Login from './pages/Login';
-import CekSurat from './pages/CekSurat'; // Pastikan ini ada jika fitur cek surat dipakai
+import CekSurat from './pages/CekSurat';
 import ProtectedRoute from './components/ProtectedRoute';
+import Pengaduan from './pages/Pengaduan';
 
 // Halaman Admin
 import AdminDashboard from './pages/AdminDashboard';
 import SuratAdmin from './pages/SuratAdmin';
 import BeritaAdmin from './pages/BeritaAdmin';
-import PengaduanAdmin from './pages/PengaduanAdmin'; // <--- INI PENTING!
+import PengaduanAdmin from './pages/PengaduanAdmin'; 
+import UmkmAdmin from './pages/UmkmAdmin';      
+import WisataAdmin from './pages/WisataAdmin'; // 🔥 Import Wisata
 
 function App() {
   return (
@@ -35,8 +37,8 @@ function App() {
         <Route path="/wisata" element={<Wisata />} />
         <Route path="/wisata/:id" element={<WisataDetail />} />
         <Route path="/layanan-surat" element={<LayananSurat />} />
-        <Route path="/cek-surat" element={<CekSurat />} />
         <Route path="/pengaduan" element={<Pengaduan />} />
+        <Route path="/cek-surat" element={<CekSurat />} /> 
         <Route path="/login" element={<Login />} />
 
         {/* Rute Admin (Harus Login) */}
@@ -44,9 +46,11 @@ function App() {
           <Route path="/admin-dashboard" element={<AdminDashboard />} />
           <Route path="/surat-admin" element={<SuratAdmin />} />
           <Route path="/berita-admin" element={<BeritaAdmin />} />
-          
-          {/* 🔥 JALUR ADMIN PENGADUAN DIBUKA DI SINI */}
           <Route path="/pengaduan-admin" element={<PengaduanAdmin />} />
+          <Route path="/umkm-admin" element={<UmkmAdmin />} /> 
+          
+          {/* 🔥 Tambahkan Route Wisata Admin */}
+          <Route path="/wisata-admin" element={<WisataAdmin />} /> 
         </Route>
       </Routes>
     </div>
