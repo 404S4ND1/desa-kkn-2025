@@ -63,7 +63,8 @@ export default function Home() {
   };
 
   return (
-    <div className="flex flex-col min-h-screen">
+    // PERBAIKAN 1: Tambahkan overflow-x-hidden agar elemen tidak melebar ke samping di HP
+    <div className="flex flex-col min-h-screen overflow-x-hidden">
       
       {/* 1. HERO SECTION */}
       <div className="relative h-screen w-full overflow-hidden">
@@ -82,7 +83,7 @@ export default function Home() {
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ delay: 0.5 }}
-            className="text-neutral font-bold tracking-widest uppercase mb-4 bg-primary/40 backdrop-blur-md px-6 py-2 rounded-full border border-neutral/30 shadow-lg"
+            className="text-neutral font-bold tracking-widest uppercase mb-4 bg-primary/40 backdrop-blur-md px-4 py-2 md:px-6 md:py-2 rounded-full border border-neutral/30 shadow-lg text-xs md:text-sm"
           >
             {isLoading ? "Memuat..." : "Website Resmi Desa"}
           </motion.span>
@@ -91,7 +92,8 @@ export default function Home() {
             initial={{ opacity: 0, y: 30 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ delay: 0.7, duration: 0.8 }}
-            className="text-5xl md:text-7xl font-extrabold text-white mb-6 leading-tight drop-shadow-xl"
+            // PERBAIKAN 2: text-3xl di HP, text-5xl di Tablet, text-7xl di Desktop
+            className="text-3xl sm:text-5xl md:text-7xl font-extrabold text-white mb-6 leading-tight drop-shadow-xl"
           >
             Menjelajahi Keindahan <br/>
             <span className="text-transparent bg-clip-text bg-gradient-to-r from-neutral to-accent">
@@ -103,7 +105,8 @@ export default function Home() {
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}
             transition={{ delay: 1, duration: 0.8 }}
-            className="text-lg md:text-2xl text-gray-200 mb-10 max-w-2xl font-light"
+            // PERBAIKAN 3: Ukuran font deskripsi lebih kecil di HP agar tidak memenuhi layar
+            className="text-base sm:text-lg md:text-2xl text-gray-200 mb-10 max-w-2xl font-light px-2"
           >
             {info.regency}, {info.province}
           </motion.p>
@@ -112,12 +115,12 @@ export default function Home() {
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ delay: 1.2 }}
-            className="flex flex-col sm:flex-row gap-4"
+            className="flex flex-col sm:flex-row gap-4 w-full sm:w-auto px-4 sm:px-0"
           >
-            <Link to="/wisata" className="group bg-accent hover:bg-orange-600 text-white px-8 py-4 rounded-full font-bold transition-all duration-300 shadow-[0_0_20px_rgba(230,126,34,0.4)] hover:shadow-[0_0_30px_rgba(230,126,34,0.6)] hover:-translate-y-1 flex items-center gap-2">
+            <Link to="/wisata" className="group bg-accent hover:bg-orange-600 text-white px-8 py-4 rounded-full font-bold transition-all duration-300 shadow-[0_0_20px_rgba(230,126,34,0.4)] hover:shadow-[0_0_30px_rgba(230,126,34,0.6)] hover:-translate-y-1 flex items-center justify-center gap-2">
               Jelajahi Wisata <ArrowRight className="w-5 h-5 group-hover:translate-x-1 transition-transform" />
             </Link>
-            <Link to="/profil" className="bg-white/10 hover:bg-white/20 backdrop-blur-md text-white px-8 py-4 rounded-full font-bold transition duration-300 border border-white/30 hover:-translate-y-1">
+            <Link to="/profil" className="bg-white/10 hover:bg-white/20 backdrop-blur-md text-white px-8 py-4 rounded-full font-bold transition duration-300 border border-white/30 hover:-translate-y-1 text-center">
               Profil Desa
             </Link>
           </motion.div>
@@ -133,7 +136,7 @@ export default function Home() {
         </motion.div>
       </div>
 
-      {/* 2. STATISTIK (Grid disesuaikan jadi 3 kolom agar rapi) */}
+      {/* 2. STATISTIK */}
       <div className="relative z-20 -mt-24 px-4">
         <motion.div 
           initial="hidden"
@@ -163,7 +166,7 @@ export default function Home() {
             <div className="inline-block px-4 py-2 bg-neutral/30 text-primary rounded-full font-bold text-sm mb-6 border border-neutral">
               Tentang Desa Kami
             </div>
-            <h2 className="text-4xl font-bold text-primary mb-6 leading-snug">
+            <h2 className="text-3xl md:text-4xl font-bold text-primary mb-6 leading-snug">
               Membangun Desa, <br/> <span className="text-secondary">Mensejahterakan Warga</span>
             </h2>
             <p className="text-slate-600 text-lg leading-relaxed mb-6">
@@ -199,7 +202,7 @@ export default function Home() {
                <img 
                  src="https://images.unsplash.com/photo-1590523277543-a94d2e4eb00b?q=80&w=1932&auto=format&fit=crop" 
                  alt="Desa View" 
-                 className="rounded-xl w-full h-[400px] object-cover"
+                 className="rounded-xl w-full h-[300px] md:h-[400px] object-cover"
                />
             </div>
           </motion.div>
