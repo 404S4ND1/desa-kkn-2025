@@ -1,6 +1,7 @@
 import axios from 'axios';
 
-const API_URL = 'http://127.0.0.1:8000/api';
+// URL Backend Production
+const API_URL = 'https://api.sukajayalempasing.my.id/api';
 
 const api = axios.create({
   baseURL: API_URL,
@@ -10,7 +11,7 @@ const api = axios.create({
   }
 });
 
-// --- TAMBAHAN: INTERCEPTOR ---
+// --- INTERCEPTOR ---
 // Sebelum request dikirim, cek apakah ada token di localStorage
 api.interceptors.request.use((config) => {
   const token = localStorage.getItem('token');
